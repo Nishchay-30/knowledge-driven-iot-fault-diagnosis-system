@@ -1,0 +1,112 @@
+# Knowledge-Driven Diagnostic Expert Rules
+# Declarative Physics & Engineering Rules for 12V Industrial DC Motor System
+
+version: "1.0.0"
+domain: "12V DC Industrial Motor Fault Diagnosis"
+
+rules:
+  - rule_id: "RULE_001_SENSOR_ANOMALY"
+    name: "Sensor Out-of-Range or Acquisition Error"
+    priority: 100
+    conditions:
+      any:
+        - "temperature_c < -20.0 or temperature_c > 130.0"
+        - "current_a < 0.0 or current_a > 8.0"
+        - "vibration_rms_g < 0.0 or vibration_rms_g > 15.0"
+        - "rpm < 0.0 or rpm > 6000.0"
+        - "sensor_status == 'error'"
+    hypothesis:
+      suspected_fault: "Sensor Acquisition Fault"
+      severity: "UNKNOWN / SENSOR ERROR"
+      confidence: 0.95
+      explanation: "Telemetry readings violate physical bounds or signal acquisition bitflag reported hardware read failure."
+      recommended_action: "Inspect sensor wiring: check DS18B20 4.7kΩ pull-up resistor, verify ACS712 ADC voltage divider (5V to 3.3V safe limit), test I2C bus lines for MPU6050."
+
+  - rule_id: "RULE_002_MOTOR_STALL"
+    name: "Locked Rotor / Mechanical Jam"
+    priority: 90
+    conditions:
+      all:
+        - "current_a >= 1.70"
+        - "rpm <= 250.0"
+    hypothesis:
+      suspected_fault: "Motor Stall / Locked Rotor"
+      severity: "CRITICAL"
+      confidence: 0.96
+      explanation: "Current exceeds 1.7A (approaching stall current rating of 2.2A) while motor speed drops to near zero (<250 RPM), indicating locked rotor."
+      recommended_action: "Immediate de-energization advised to avoid L298N thermal shutdown or armature winding burnout. Clear mechanical blockage before restarting."
+
+  - rule_id: "RULE_003_THERMAL_OVERHEATING"
+    name: "Motor Overheating / Thermal Stress"
+    priority: 80
+    conditions:
+      all:
+        - "temperature_c >= 65.0"
+        - "current_a >= 0.90"
+    hypothesis:
+      suspected_fault: "Motor Overheating"
+      severity: "CRITICAL"
+      confidence: 0.90
+      explanation: "Motor casing temperature has risen above critical limit (>=65°C) accompanied by elevated current draw, leading to thermal insulation degradation."
+      recommended_action: "Check airflow around cooling fins, verify ambient temperature, inspect brush gear and winding insulation resistance."
+
+  - rule_id: "RULE_004_MECHANICAL_OVERLOAD"
+    name: "Excessive Mechanical Load / Drag"
+    priority: 70
+    conditions:
+      all:
+        - "current_a >= 1.05"
+        - "rpm < 1600.0"
+        - "rpm > 250.0"
+    hypothesis:
+      suspected_fault: "Mechanical Overload"
+      severity: "WARNING"
+      confidence: 0.88
+      explanation: "Current draw is significantly elevated (>=1.05A) while shaft rotational speed is depressed below normal operating range (1600-2400 RPM)."
+      recommended_action: "Reduce mechanical transmission load, check belt tension or gearbox lubrication, inspect driven machinery for mechanical binding."
+
+  - rule_id: "RULE_005_EXCESSIVE_VIBRATION"
+    name: "Structural Resonance / Imbalance / Misalignment"
+    priority: 60
+    conditions:
+      all:
+        - "vibration_rms_g >= 0.40"
+        - "current_a < 1.70"
+    hypothesis:
+      suspected_fault: "Excessive Vibration"
+      severity: "WARNING"
+      confidence: 0.85
+      explanation: "Vibration RMS exceeds 0.40g threshold while current remains below stall, indicating mechanical unbalance, loose mounting bolts, or shaft misalignment."
+      recommended_action: "Tighten motor mounting fasteners, check shaft concentricity with laser/dial indicator, inspect motor bearings for spalling."
+
+  - rule_id: "RULE_006_MOTOR_SLOWDOWN"
+    name: "Motor Speed Degradation"
+    priority: 50
+    conditions:
+      all:
+        - "rpm < 1500.0"
+        - "rpm > 250.0"
+        - "current_a < 1.05"
+    hypothesis:
+      suspected_fault: "Motor Slowdown"
+      severity: "WARNING"
+      confidence: 0.80
+      explanation: "Shaft speed is below 1500 RPM despite moderate current draw, indicating low supply voltage or high dry friction in bearings."
+      recommended_action: "Verify 12V DC power supply rail voltage under load, inspect commutator brushes for wear, lubricate sleeve/ball bearings."
+
+  - rule_id: "RULE_007_NORMAL_OPERATION"
+    name: "Healthy Baseline State"
+    priority: 10
+    conditions:
+      all:
+        - "temperature_c >= 20.0 and temperature_c < 55.0"
+        - "vibration_rms_g < 0.35"
+        - "current_a >= 0.30 and current_a < 0.95"
+        - "rpm >= 1700.0"
+    hypothesis:
+      suspected_fault: "Normal"
+      severity: "NORMAL"
+      confidence: 0.98
+      explanation: "All monitored telemetry parameters (temperature, vibration, current, speed) are well within nominal rated design envelopes."
+      recommended_action: "No corrective intervention required. Continue routine condition-monitoring schedule."
+

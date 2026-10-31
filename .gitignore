@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtualenv
+.env
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing & Cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs & DBs
+*.log
+data/sqlite/*.db
+!data/sqlite/.gitkeep
+data/csv/*.csv
+!data/csv/.gitkeep
+
+
+# Private ESP32 credentials
+/Final_ARD_Code/secrets.h
+.local_backups/
+
+# Private PlatformIO ESP32 credentials
+/firmware/esp32_motor_monitor/include/local_secrets.h
+
+# Local-only files
+.venv-old-link
+/data/node_red/*.jsonl
+/node_red_flow.json

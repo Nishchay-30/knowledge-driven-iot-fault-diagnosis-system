@@ -1,0 +1,29 @@
+# Registered Industrial Assets & Specifications
+
+devices:
+  - device_id: motor01
+    name: "Primary Feed Drive Motor (Station 01)"
+    type: "12V Brushed DC Motor"
+    driver: "L298N Dual H-Bridge Driver"
+    rated_voltage_v: 12.0
+    rated_current_a: 0.80
+    stall_current_a: 2.20
+    no_load_speed_rpm: 2350
+    rated_speed_rpm: 2000
+    rated_torque_kgcm: 1.5
+    installed_sensors:
+      - type: "DS18B20"
+        parameter: "temperature_c"
+        interface: "1-Wire GPIO4"
+      - type: "MPU6050"
+        parameter: "vibration_rms_g"
+        interface: "I2C (SDA 21, SCL 22)"
+      - type: "ACS712-05B"
+        parameter: "current_a"
+        interface: "ADC1 CH0 (GPIO36) with divider"
+      - type: "IR Optical Slot Sensor"
+        parameter: "rpm"
+        interface: "Interrupt GPIO18"
+    location: "Machining Cell 1 - Primary Line"
+    created_at: "2026-10-30T00:00:00Z"
+

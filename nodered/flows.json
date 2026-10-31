@@ -1,0 +1,342 @@
+[
+    {
+        "id": "54da57a1d2760d74",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "6a653036bc72c6a4",
+        "type": "mqtt in",
+        "z": "54da57a1d2760d74",
+        "name": "Motor Fault Alerts",
+        "topic": "iot/factory/motor01/alerts/#",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "565918fea3215f7c",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 215,
+        "y": 340,
+        "wires": [
+            [
+                "a97f57419f246ecd"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a967ebe8e814cc74",
+        "type": "debug",
+        "z": "54da57a1d2760d74",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "4406bb09e1109abf",
+        "type": "inject",
+        "z": "54da57a1d2760d74",
+        "name": "Simulate Motor Fault",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{   \"device_id\": \"motor01\",   \"test\": true,   \"severity\": \"WARNING\",   \"fault\": \"TEST ONLY - Possible Overheating\",   \"temperature_c\": 70,   \"actuate_hardware\": false }",
+        "payloadType": "json",
+        "x": 210,
+        "y": 700,
+        "wires": [
+            [
+                "15d2aa2763ceaffa"
+            ]
+        ]
+    },
+    {
+        "id": "15d2aa2763ceaffa",
+        "type": "mqtt out",
+        "z": "54da57a1d2760d74",
+        "name": "Publish Test Alert",
+        "topic": "iot/factory/motor01/alerts/test",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "565918fea3215f7c",
+        "x": 470,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "a97f57419f246ecd",
+        "type": "switch",
+        "z": "54da57a1d2760d74",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "iot/factory/motor01/alerts/test",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "iot/factory/motor01/alerts",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 370,
+        "y": 380,
+        "wires": [
+            [
+                "a967ebe8e814cc74",
+                "c086fcba17587385"
+            ],
+            [
+                "0345ac59cb79eac8",
+                "91e36132c842b5bc",
+                "5b6d533c85cf0f3f"
+            ]
+        ]
+    },
+    {
+        "id": "0345ac59cb79eac8",
+        "type": "debug",
+        "z": "54da57a1d2760d74",
+        "name": "Real Motor Alerts",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 570,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "91e36132c842b5bc",
+        "type": "switch",
+        "z": "54da57a1d2760d74",
+        "name": "Fault Severity Filter",
+        "property": "payload.severity",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "WARNING",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "CRITICAL",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 570,
+        "y": 460,
+        "wires": [
+            [
+                "d835881b5a06196c"
+            ],
+            [
+                "2eeab1636b1eb242"
+            ]
+        ]
+    },
+    {
+        "id": "d835881b5a06196c",
+        "type": "debug",
+        "z": "54da57a1d2760d74",
+        "name": "Motor Warning Alert",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "2eeab1636b1eb242",
+        "type": "debug",
+        "z": "54da57a1d2760d74",
+        "name": "Critical Motor Alarm",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "5b6d533c85cf0f3f",
+        "type": "function",
+        "z": "54da57a1d2760d74",
+        "name": "Save Fault Alert",
+        "func": "\nif (msg.topic !== \"iot/factory/motor01/alerts\") {\n    return null;\n}\n\nlet alert = msg.payload;\n\nif (typeof alert === \"string\") {\n    try {\n        alert = JSON.parse(alert);\n    } catch (error) {\n        node.warn(\"Invalid alert JSON\");\n        return null;\n    }\n}\n\nif (!alert || typeof alert !== \"object\" || alert.test === true) {\n    return null;\n}\n\nconst log = {\n    received_at: new Date().toISOString(),\n    timestamp: alert.timestamp,\n    device_id: alert.device_id,\n    severity: alert.severity,\n    fault: alert.fault,\n    message: alert.message,\n    recommended_action: alert.recommended_action\n};\n\nmsg.payload = JSON.stringify(log) + \"\\n\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 560,
+        "wires": [
+            [
+                "cf050b9957bebc80"
+            ]
+        ]
+    },
+    {
+        "id": "cf050b9957bebc80",
+        "type": "file",
+        "z": "54da57a1d2760d74",
+        "name": "Fault Alert History",
+        "filename": "/Users/nishchayarora30/Desktop/Fault Diagnosis System new/data/node_red/fault_alerts.jsonl",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 810,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c086fcba17587385",
+        "type": "function",
+        "z": "54da57a1d2760d74",
+        "name": "Log MQTT Test Alert",
+        "func": "\nif (msg.topic !== \"iot/factory/motor01/alerts/test\") {\n    return null;\n}\n\nlet alert = msg.payload;\n\nif (typeof alert === \"string\") {\n    try {\n        alert = JSON.parse(alert);\n    } catch (error) {\n        return null;\n    }\n}\n\nif (!alert || alert.test !== true) {\n    return null;\n}\n\nmsg.payload = JSON.stringify({\n    received_at: new Date().toISOString(),\n    test_only: true,\n    device_id: alert.device_id,\n    severity: alert.severity,\n    fault: alert.fault,\n    actuate_hardware: false\n}) + \"\\n\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 260,
+        "wires": [
+            [
+                "09b398d13872743b"
+            ]
+        ]
+    },
+    {
+        "id": "09b398d13872743b",
+        "type": "file",
+        "z": "54da57a1d2760d74",
+        "name": "MQTT Test Alert History",
+        "filename": "/Users/nishchayarora30/Desktop/Fault Diagnosis System new/data/node_red/mqtt_test_alerts.jsonl",
+        "filenameType": "str",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 850,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "565918fea3215f7c",
+        "type": "mqtt-broker",
+        "name": "HiveMQ Cloud",
+        "broker": "1285e2f1b7e14c249b55489e3f2de0e3.s1.eu.hivemq.cloud",
+        "port": "8883",
+        "tls": "a2b642b66c12e81a",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": true,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a2b642b66c12e81a",
+        "type": "tls-config",
+        "name": "HiveMQ TLS",
+        "certType": "files",
+        "cert": "",
+        "key": "",
+        "p12": "",
+        "p12name": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": "",
+        "certEnv": "",
+        "keyEnv": "",
+        "caEnv": ""
+    }
+]

@@ -1,0 +1,47 @@
+# Engineering Operating Thresholds for 12V DC Motor Diagnostic System
+# Units:
+# - Temperature: Celsius (°C)
+# - Vibration: RMS Acceleration (g)
+# - Current: Amperes (A)
+# - Speed: Revolutions Per Minute (RPM)
+
+temperature:
+  normal_min: 20.0
+  normal_max: 50.0
+  warning_high: 60.0
+  critical_high: 75.0
+  sensor_error_min: -20.0
+  sensor_error_max: 130.0
+  hysteresis_c: 2.0
+
+vibration:
+  normal_min: 0.02
+  normal_max: 0.25
+  warning_high: 0.40
+  critical_high: 0.70
+  sensor_error_max: 16.0
+  hysteresis_g: 0.03
+
+current:
+  normal_min: 0.30
+  normal_max: 0.85
+  warning_high: 1.10
+  critical_high: 1.70
+  stall_threshold: 1.80
+  sensor_error_min: 0.0
+  sensor_error_max: 10.0
+  hysteresis_a: 0.08
+
+rpm:
+  normal_min: 1800.0
+  normal_max: 2400.0
+  slowdown_warning: 1400.0
+  stall_max: 200.0
+  sensor_error_max: 5000.0
+  hysteresis_rpm: 50.0
+
+persistence:
+  consecutive_readings_required: 3
+  cooldown_seconds: 15
+  heartbeat_timeout_seconds: 10
+

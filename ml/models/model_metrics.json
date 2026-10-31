@@ -1,0 +1,92 @@
+{
+  "timestamp": "2026-10-31T15:44:31.766570+00:00",
+  "algorithm": "RandomForestClassifier",
+  "n_estimators": 100,
+  "baseline_decision_tree": {
+    "accuracy": 0.9686,
+    "weighted_f1": 0.9684
+  },
+  "random_forest": {
+    "accuracy": 1.0,
+    "weighted_f1": 1.0
+  },
+  "classification_report": {
+    "Excessive Vibration": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Mechanical Overload": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Motor Overheating": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Motor Slowdown": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Motor Stall": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Normal": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "Sensor Error": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 100.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 700.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 700.0
+    }
+  },
+  "feature_importances": {
+    "rpm": 0.21303679792774055,
+    "current_per_rpm": 0.2043126802265822,
+    "vibration_rms_g": 0.16529378394411257,
+    "power_est_w": 0.12063324444339578,
+    "current_a": 0.11652516910490876,
+    "temperature_c": 0.11587069573525116,
+    "vibe_trend": 0.026006753220545943,
+    "temp_trend": 0.01693832985464556,
+    "current_delta": 0.015165757464336842,
+    "rpm_delta": 0.006216788078480789
+  },
+  "classes": [
+    "Excessive Vibration",
+    "Mechanical Overload",
+    "Motor Overheating",
+    "Motor Slowdown",
+    "Motor Stall",
+    "Normal",
+    "Sensor Error"
+  ],
+  "limitations_note": "Trained on synthetic physical simulation. Real DC motor deployment requires transfer calibration against physical benchmark loads."
+}

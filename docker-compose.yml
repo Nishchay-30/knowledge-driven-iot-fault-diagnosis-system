@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # 1. Mosquitto Local MQTT Broker
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: fault_diagnosis_mosquitto
+    restart: unless-stopped
+    ports:
+      - "1883:1883"
+    environment:
+      - TZ=UTC
+    command: mosquitto -c /mosquitto-no-auth.conf
+
+  # 2. Node-RED Industrial Automation & Orchestration Service
+  nodered:
+    image: nodered/node-red:latest
+    container_name: fault_diagnosis_nodered
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    ports:
+      - "1880:1880"
+    environment:
+      - TZ=UTC
+      - FLOWS=flows.json
+    volumes:
+      - ./nodered:/data
+
+  # 3. Python FastAPI Diagnostic Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fault_diagnosis_backend
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    ports:
+      - "8000:8000"
+    environment:
+      - USE_LOCAL_BROKER=true
+      - LOCAL_MQTT_HOST=mosquitto
+      - LOCAL_MQTT_PORT=1883
+    volumes:
+      - ./data:/app/data
+
+  # 4. Streamlit Monitoring Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fault_diagnosis_dashboard
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8501:8501"
+    command: streamlit run dashboard/app.py --server.port=8501 --server.address=0.0.0.0
+    volumes:
+      - ./data:/app/data
+
